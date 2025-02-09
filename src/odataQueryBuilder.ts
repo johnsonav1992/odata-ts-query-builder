@@ -49,10 +49,6 @@ export class ODataQueryBuilder {
      */
     private _filters: string[] = [];
 
-    /**
-     * Creates an instance of ODataQueryBuilder.
-     * @param baseUrl - The base URL for the OData service.
-     */
     constructor(baseUrl: string) {
         this._url = baseUrl;
     }
