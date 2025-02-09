@@ -1,6 +1,6 @@
 {
     "name": "odata-ts-query-builder",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "An easy-to-use and expressive library for building OData queries in TypeScript",
     "keywords": [
         "odata",
