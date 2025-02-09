@@ -99,14 +99,15 @@ export class FilterBuilder {
 
     private finalize(): void {
         const expression = this.buildExpression();
+
         if (this._parent instanceof FilterBuilder) {
             this._parent.addExpression(expression);
         }
     }
 
-    // Ensure the expressions are finalized automatically
     toString(): string {
         this.finalize();
+
         return this.buildExpression();
     }
 }

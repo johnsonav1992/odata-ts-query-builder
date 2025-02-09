@@ -120,13 +120,16 @@ export class ODataQueryBuilder<
      * @param callback - A callback function that builds the filter expression using FilterBuilder.
      * @returns The current instance of ODataQueryBuilder.
      */
-    filter(callback: (builder: FilterBuilder) => void): ODataQueryBuilder<T> {
+    filter(
+        callback: (builder: FilterBuilder) => void,
+        filterType: 'and' | 'or' = 'and'
+    ): ODataQueryBuilder<T> {
         const filterBuilder = new FilterBuilder(this);
 
         callback(filterBuilder);
 
         const filterExpression = filterBuilder.toString();
-        this.setFilterExpression(filterExpression);
+        this.setFilterExpression(filterExpression, filterType);
 
         return this;
     }
@@ -142,10 +145,16 @@ export class ODataQueryBuilder<
     /**
      * Sets the filter expression for the OData query.
      * @param expression - The filter expression.
+     * @param type - The logical operator ('and' | 'or'). Default is 'and'.
      */
-    private setFilterExpression(expression: string): ODataQueryBuilder<T> {
-        this._filters.push(expression);
-        this._params.$filter = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
+    private setFilterExpression(
+        expression: string,
+        type: 'and' | 'or' = 'and'
+    ): ODataQueryBuilder<T> {
+        this._filters.push(
+            this._filters.length ? `${type} ${expression}` : expression
+        );
+        this._params.$filter = this._filters.join(' ');
         return this;
     }
 

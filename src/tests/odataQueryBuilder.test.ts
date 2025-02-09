@@ -18,11 +18,23 @@ type User = {
 test('should build a query with filter', () => {
     const query = new ODataQueryBuilder<User>(url)
         .select(['Name', 'Age'])
-        .filter((f) => f.gt('Age', 30))
+        .filter((filter) => filter.gt('Age', 30))
         .build();
 
     expect(query).toBe(
         'http://www.example.com/Users?$select=Name,Age&$filter=Age gt 30'
+    );
+});
+
+test('should build a query with multiple, top-level filters', () => {
+    const query = new ODataQueryBuilder<User>(url)
+        .select(['Name', 'Age'])
+        .filter((filter) => filter.gt('Age', 30))
+        .filter((filter) => filter.eq('Age', 5), 'or')
+        .build();
+
+    expect(query).toBe(
+        'http://www.example.com/Users?$select=Name,Age&$filter=Age gt 30 or Age eq 5'
     );
 });
 
