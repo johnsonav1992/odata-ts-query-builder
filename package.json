@@ -13,5 +13,6 @@
       "url": "git+https://github.com/johnsonav1992/odata-ts-query-builder.git"
     },
     "files": ["dist"],
-    "type": "module"
+    "type": "module",
+     "license": "MIT"
   }
