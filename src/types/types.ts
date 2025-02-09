@@ -18,3 +18,5 @@ export type OptionalCapitalizeKeys<
           [K in keyof T as Capitalize<string & K>]: T[K];
       }
     : T;
+
+export type ValidURL = `http${'s' | ''}://${string}`;

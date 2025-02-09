@@ -1,7 +1,8 @@
 import { FilterBuilder } from './filterBuilder.js';
 import type {
     ODataQueryOption,
-    OptionalCapitalizeKeys
+    OptionalCapitalizeKeys,
+    ValidURL
 } from './types/types.js';
 
 /**
@@ -42,7 +43,7 @@ export class ODataQueryBuilder<
     /**
      * The base URL for the OData service.
      */
-    private _url: string;
+    private _url: ValidURL;
 
     /**
      * The parameters for the OData query.
@@ -55,7 +56,7 @@ export class ODataQueryBuilder<
      */
     private _filters: string[] = [];
 
-    constructor(baseUrl: string) {
+    constructor(baseUrl: ValidURL) {
         this._url = baseUrl;
     }
 
