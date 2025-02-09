@@ -1,6 +1,6 @@
 import { ODataQueryBuilder } from './odataQueryBuilder.js';
 
-export class FilterBuilder {
+export class FilterBuilder<TEntity = any> {
     private _parent: ODataQueryBuilder | FilterBuilder;
     private _expressions: string[] = [];
 
@@ -13,54 +13,66 @@ export class FilterBuilder {
         return this;
     }
 
-    contains(field: string, value: string): FilterBuilder {
-        this._expressions.push(`contains(${field}, '${value}')`);
+    contains(field: keyof TEntity, value: string): FilterBuilder {
+        this._expressions.push(`contains(${String(field)}, '${value}')`);
         return this;
     }
 
-    endsWith(field: string, value: string): FilterBuilder {
-        this._expressions.push(`endswith(${field}, '${value}')`);
+    endsWith(field: keyof TEntity, value: string): FilterBuilder {
+        this._expressions.push(`endswith(${String(field)}, '${value}')`);
         return this;
     }
 
-    eq(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} eq ${this.formatValue(value)}`);
+    eq(field: keyof TEntity, value: string | number): FilterBuilder {
+        this._expressions.push(
+            `${String(field)} eq ${this.formatValue(value)}`
+        );
         return this;
     }
 
-    ge(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} ge ${this.formatValue(value)}`);
+    ge(field: keyof TEntity, value: string | number): FilterBuilder {
+        this._expressions.push(
+            `${String(field)} ge ${this.formatValue(value)}`
+        );
         return this;
     }
 
-    gt(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} gt ${this.formatValue(value)}`);
+    gt(field: keyof TEntity, value: string | number): FilterBuilder {
+        this._expressions.push(
+            `${String(field)} gt ${this.formatValue(value)}`
+        );
         return this;
     }
 
-    has(field: string, value: string): FilterBuilder {
-        this._expressions.push(`${field} has ${value}`);
+    has(field: keyof TEntity, value: string): FilterBuilder {
+        this._expressions.push(`${String(field)} has ${value}`);
         return this;
     }
 
-    in(field: string, values: string[]): FilterBuilder {
+    in(field: keyof TEntity, values: string[]): FilterBuilder {
         const formattedValues = values.map(this.formatValue).join(',');
-        this._expressions.push(`${field} in (${formattedValues})`);
+        this._expressions.push(`${String(field)} in (${formattedValues})`);
         return this;
     }
 
-    le(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} le ${this.formatValue(value)}`);
+    le(field: keyof TEntity, value: string | number): FilterBuilder {
+        this._expressions.push(
+            `${String(field)} le ${this.formatValue(value)}`
+        );
         return this;
     }
 
-    lt(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} lt ${this.formatValue(value)}`);
+    lt(field: keyof TEntity, value: string | number): FilterBuilder {
+        this._expressions.push(
+            `${String(field)} lt ${this.formatValue(value)}`
+        );
         return this;
     }
 
-    ne(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} ne ${this.formatValue(value)}`);
+    ne(field: keyof TEntity, value: string | number): FilterBuilder {
+        this._expressions.push(
+            `${String(field)} ne ${this.formatValue(value)}`
+        );
         return this;
     }
 

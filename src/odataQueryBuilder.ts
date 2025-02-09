@@ -126,10 +126,10 @@ export class ODataQueryBuilder<
      * @returns The current instance of ODataQueryBuilder.
      */
     filter(
-        callback: (builder: FilterBuilder) => void,
+        callback: (builder: FilterBuilder<T>) => void,
         filterType: 'and' | 'or' = 'and'
     ): ODataQueryBuilder<T> {
-        const filterBuilder = new FilterBuilder(this);
+        const filterBuilder = new FilterBuilder<T>(this);
 
         callback(filterBuilder);
 
