@@ -8,33 +8,8 @@ export class FilterBuilder {
         this._parent = parent;
     }
 
-    eq(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} eq ${this.formatValue(value)}`);
-        return this;
-    }
-
-    ne(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} ne ${this.formatValue(value)}`);
-        return this;
-    }
-
-    gt(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} gt ${this.formatValue(value)}`);
-        return this;
-    }
-
-    lt(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} lt ${this.formatValue(value)}`);
-        return this;
-    }
-
-    ge(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} ge ${this.formatValue(value)}`);
-        return this;
-    }
-
-    le(field: string, value: string | number): FilterBuilder {
-        this._expressions.push(`${field} le ${this.formatValue(value)}`);
+    and(): FilterBuilder {
+        this._expressions.push('and');
         return this;
     }
 
@@ -43,8 +18,54 @@ export class FilterBuilder {
         return this;
     }
 
-    and(): FilterBuilder {
-        this._expressions.push('and');
+    endsWith(field: string, value: string): FilterBuilder {
+        this._expressions.push(`endswith(${field}, '${value}')`);
+        return this;
+    }
+
+    eq(field: string, value: string | number): FilterBuilder {
+        this._expressions.push(`${field} eq ${this.formatValue(value)}`);
+        return this;
+    }
+
+    ge(field: string, value: string | number): FilterBuilder {
+        this._expressions.push(`${field} ge ${this.formatValue(value)}`);
+        return this;
+    }
+
+    gt(field: string, value: string | number): FilterBuilder {
+        this._expressions.push(`${field} gt ${this.formatValue(value)}`);
+        return this;
+    }
+
+    has(field: string, value: string): FilterBuilder {
+        this._expressions.push(`${field} has ${value}`);
+        return this;
+    }
+
+    in(field: string, values: string[]): FilterBuilder {
+        const formattedValues = values.map(this.formatValue).join(',');
+        this._expressions.push(`${field} in (${formattedValues})`);
+        return this;
+    }
+
+    le(field: string, value: string | number): FilterBuilder {
+        this._expressions.push(`${field} le ${this.formatValue(value)}`);
+        return this;
+    }
+
+    lt(field: string, value: string | number): FilterBuilder {
+        this._expressions.push(`${field} lt ${this.formatValue(value)}`);
+        return this;
+    }
+
+    ne(field: string, value: string | number): FilterBuilder {
+        this._expressions.push(`${field} ne ${this.formatValue(value)}`);
+        return this;
+    }
+
+    not(): FilterBuilder {
+        this._expressions.push('not');
         return this;
     }
 
