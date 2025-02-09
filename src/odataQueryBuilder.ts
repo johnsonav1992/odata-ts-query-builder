@@ -68,7 +68,7 @@ export class ODataQueryBuilder<
     select(
         fields: Array<keyof OptionalCapitalizeKeys<T, Options>>
     ): ODataQueryBuilder<T> {
-        this._params['$select'] = fields.join(',');
+        this._params.$select = fields.join(',');
         return this;
     }
 
@@ -80,7 +80,7 @@ export class ODataQueryBuilder<
     expand(
         fields: Array<keyof OptionalCapitalizeKeys<T, Options>>
     ): ODataQueryBuilder<T> {
-        this._params['$expand'] = fields.join(',');
+        this._params.$expand = fields.join(',');
         return this;
     }
 
@@ -93,7 +93,7 @@ export class ODataQueryBuilder<
         field: keyof OptionalCapitalizeKeys<T, Options>,
         direction: 'asc' | 'desc' = 'asc'
     ): ODataQueryBuilder<T> {
-        this._params['$orderby'] = `${String(field)} ${direction}`;
+        this._params.$orderby = `${String(field)} ${direction}`;
         return this;
     }
 
@@ -102,7 +102,7 @@ export class ODataQueryBuilder<
      * @param count - The number of records to return.
      */
     top(count: number): ODataQueryBuilder<T> {
-        this._params['$top'] = count.toString();
+        this._params.$top = count.toString();
         return this;
     }
 
@@ -111,7 +111,7 @@ export class ODataQueryBuilder<
      * @param count - The number of records to skip.
      */
     skip(count: number): ODataQueryBuilder<T> {
-        this._params['$skip'] = count.toString();
+        this._params.$skip = count.toString();
         return this;
     }
 
@@ -135,7 +135,7 @@ export class ODataQueryBuilder<
      * Specifies that the OData query should include a count of the total records.
      */
     count(): ODataQueryBuilder<T> {
-        this._params['$count'] = 'true';
+        this._params.$count = 'true';
         return this;
     }
 
@@ -145,7 +145,7 @@ export class ODataQueryBuilder<
      */
     private setFilterExpression(expression: string): ODataQueryBuilder<T> {
         this._filters.push(expression);
-        this._params['$filter'] = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
+        this._params.$filter = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
         return this;
     }
 
