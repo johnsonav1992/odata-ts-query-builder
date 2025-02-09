@@ -1,0 +1,17 @@
+{
+    "name": "odata-ts-query-builder",
+    "version": "0.0.1",
+    "description": "An easy-to-use and expressive library for building OData queries in TypeScript",
+    "keywords": ["odata", "query", "typescript"],
+    "homepage": "https://github.com/johnsonav1992/odata-ts-query-builder",
+    "bugs": {
+      "url": "https://github.com/johnsonav1992/odata-ts-query-builder/issues"
+    },
+    "author": "Alex Johnson",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/johnsonav1992/odata-ts-query-builder.git"
+    },
+    "files": ["dist"],
+    "type": "module"
+  }
