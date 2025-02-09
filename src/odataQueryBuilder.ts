@@ -110,11 +110,15 @@ export class ODataQueryBuilder {
      * @returns The current instance of ODataQueryBuilder.
      */
     filter(callback: (builder: FilterBuilder) => void): ODataQueryBuilder {
-        const filterBuilder = new FilterBuilder(this); // Pass the ODataQueryBuilder as parent to FilterBuilder
+        const filterBuilder = new FilterBuilder(this);
+
         callback(filterBuilder);
-        const filterExpression = filterBuilder.toString(); // Automatically finalize the filter expression
+
+        const filterExpression = filterBuilder.toString();
+
         this._filters.push(filterExpression);
-        this._params['$filter'] = this._filters.join(' and ');
+        this._params['$filter'] = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
+
         return this;
     }
 
