@@ -148,11 +148,6 @@ export class ODataQueryBuilder<
         return this;
     }
 
-    /**
-     * Sets the filter expression for the OData query.
-     * @param expression - The filter expression.
-     * @param type - The logical operator ('and' | 'or'). Default is 'and'.
-     */
     private setFilterExpression(
         expression: string,
         type: 'and' | 'or' = 'and'
@@ -165,10 +160,6 @@ export class ODataQueryBuilder<
         return this;
     }
 
-    /**
-     * Converts the OData query parameters into a query string.
-     * @returns The full query string.
-     */
     private toQueryString(): string {
         const query = Object.entries(this._params)
             .map(([key, value]) => `${key}=${value}`)
