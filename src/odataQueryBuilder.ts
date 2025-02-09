@@ -1,5 +1,8 @@
 import { FilterBuilder } from './filterBuilder.js';
-import type { ODataQueryOption } from './types/types.js';
+import type {
+    ODataQueryOption,
+    OptionalCapitalizeKeys
+} from './types/types.js';
 
 /**
  * A builder class for constructing OData queries.
@@ -32,7 +35,10 @@ import type { ODataQueryOption } from './types/types.js';
  * // The resulting query string will be:
  * // "https://example.com/odata?$filter=Age eq 30 and Gender eq 'Male'"
  */
-export class ODataQueryBuilder {
+export class ODataQueryBuilder<
+    T = any, // Default to any so that no schema can be passed if desired
+    Options extends { capitalizeEntityKeys?: boolean } = {}
+> {
     /**
      * The base URL for the OData service.
      */
@@ -58,7 +64,9 @@ export class ODataQueryBuilder {
      * @param fields - The fields to select.
      * @returns The current instance of ODataQueryBuilder.
      */
-    select(fields: string[]): ODataQueryBuilder {
+    select(
+        fields: Array<keyof OptionalCapitalizeKeys<T, Options>>
+    ): ODataQueryBuilder<T> {
         this._params['$select'] = fields.join(',');
         return this;
     }
@@ -68,7 +76,9 @@ export class ODataQueryBuilder {
      * @param fields - The fields to expand.
      * @returns The current instance of ODataQueryBuilder.
      */
-    expand(fields: string[]): ODataQueryBuilder {
+    expand(
+        fields: Array<keyof OptionalCapitalizeKeys<T, Options>>
+    ): ODataQueryBuilder<T> {
         this._params['$expand'] = fields.join(',');
         return this;
     }
@@ -79,10 +89,10 @@ export class ODataQueryBuilder {
      * @param direction - The direction to order by (asc or desc).
      */
     orderBy(
-        field: string,
+        field: keyof OptionalCapitalizeKeys<T, Options>,
         direction: 'asc' | 'desc' = 'asc'
-    ): ODataQueryBuilder {
-        this._params['$orderby'] = `${field} ${direction}`;
+    ): ODataQueryBuilder<T> {
+        this._params['$orderby'] = `${String(field)} ${direction}`;
         return this;
     }
 
@@ -90,7 +100,7 @@ export class ODataQueryBuilder {
      * Specifies the number of records to return in the OData query.
      * @param count - The number of records to return.
      */
-    top(count: number): ODataQueryBuilder {
+    top(count: number): ODataQueryBuilder<T> {
         this._params['$top'] = count.toString();
         return this;
     }
@@ -99,7 +109,7 @@ export class ODataQueryBuilder {
      * Specifies the number of records to skip in the OData query.
      * @param count - The number of records to skip.
      */
-    skip(count: number): ODataQueryBuilder {
+    skip(count: number): ODataQueryBuilder<T> {
         this._params['$skip'] = count.toString();
         return this;
     }
@@ -109,7 +119,7 @@ export class ODataQueryBuilder {
      * @param callback - A callback function that builds the filter expression using FilterBuilder.
      * @returns The current instance of ODataQueryBuilder.
      */
-    filter(callback: (builder: FilterBuilder) => void): ODataQueryBuilder {
+    filter(callback: (builder: FilterBuilder) => void): ODataQueryBuilder<T> {
         const filterBuilder = new FilterBuilder(this);
 
         callback(filterBuilder);
@@ -123,7 +133,7 @@ export class ODataQueryBuilder {
     /**
      * Specifies that the OData query should include a count of the total records.
      */
-    count(): ODataQueryBuilder {
+    count(): ODataQueryBuilder<T> {
         this._params['$count'] = 'true';
         return this;
     }
@@ -132,7 +142,7 @@ export class ODataQueryBuilder {
      * Sets the filter expression for the OData query.
      * @param expression - The filter expression.
      */
-    private setFilterExpression(expression: string): ODataQueryBuilder {
+    private setFilterExpression(expression: string): ODataQueryBuilder<T> {
         this._filters.push(expression);
         this._params['$filter'] = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
         return this;

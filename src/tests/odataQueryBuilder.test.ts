@@ -9,8 +9,14 @@ test('should build a simple query', () => {
     expect(query).toBe('http://www.example.com/Users?$select=Name,Age');
 });
 
+type User = {
+    Id: string;
+    Age: number;
+    Name: string;
+};
+
 test('should build a query with filter', () => {
-    const query = new ODataQueryBuilder(url)
+    const query = new ODataQueryBuilder<User>(url)
         .select(['Name', 'Age'])
         .filter((f) => f.gt('Age', 30))
         .build();
@@ -21,7 +27,7 @@ test('should build a query with filter', () => {
 });
 
 test('should build a query with order by', () => {
-    const query = new ODataQueryBuilder(url)
+    const query = new ODataQueryBuilder<User>(url)
         .select(['Name', 'Age'])
         .orderBy('Name', 'desc')
         .build();
@@ -32,7 +38,7 @@ test('should build a query with order by', () => {
 });
 
 test('should build a query with top', () => {
-    const query = new ODataQueryBuilder(url)
+    const query = new ODataQueryBuilder<User>(url)
         .select(['Name', 'Age'])
         .top(10)
         .build();
@@ -41,7 +47,7 @@ test('should build a query with top', () => {
 });
 
 test('should build a query with skip', () => {
-    const query = new ODataQueryBuilder(url)
+    const query = new ODataQueryBuilder<User>(url)
         .select(['Name', 'Age'])
         .skip(5)
         .build();

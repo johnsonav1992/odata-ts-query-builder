@@ -9,3 +9,12 @@ export type QueryOptionNames =
     | 'count'
     | 'filter'
     | 'count';
+
+export type OptionalCapitalizeKeys<
+    T,
+    Options extends { capitalizeEntityKeys?: boolean }
+> = Options['capitalizeEntityKeys'] extends true
+    ? {
+          [K in keyof T as Capitalize<string & K>]: T[K];
+      }
+    : T;
