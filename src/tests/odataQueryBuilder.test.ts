@@ -8,6 +8,7 @@ test('should build a simple query', () => {
 
     expect(query).toBe('http://www.example.com/Users?$select=Name,Age');
 });
+
 test('should build a query with filter', () => {
     const query = new ODataQueryBuilder(url)
         .select(['Name', 'Age'])
