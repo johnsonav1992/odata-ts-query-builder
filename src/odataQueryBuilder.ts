@@ -115,9 +115,7 @@ export class ODataQueryBuilder {
         callback(filterBuilder);
 
         const filterExpression = filterBuilder.toString();
-
-        this._filters.push(filterExpression);
-        this._params['$filter'] = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
+        this.setFilterExpression(filterExpression);
 
         return this;
     }
@@ -136,7 +134,7 @@ export class ODataQueryBuilder {
      */
     private setFilterExpression(expression: string): ODataQueryBuilder {
         this._filters.push(expression);
-        this._params['$filter'] = this._filters.join(' and ');
+        this._params['$filter'] = this._filters.join(' and '); // TODO: need to figure out the and vs or thing here
         return this;
     }
 
