@@ -69,6 +69,7 @@ export class ODataQueryBuilder<
         fields: Array<keyof OptionalCapitalizeKeys<T, Options>>
     ): ODataQueryBuilder<T> {
         this._params.$select = fields.join(',');
+
         return this;
     }
 
@@ -81,6 +82,7 @@ export class ODataQueryBuilder<
         fields: Array<keyof OptionalCapitalizeKeys<T, Options>>
     ): ODataQueryBuilder<T> {
         this._params.$expand = fields.join(',');
+
         return this;
     }
 
@@ -94,6 +96,7 @@ export class ODataQueryBuilder<
         direction: 'asc' | 'desc' = 'asc'
     ): ODataQueryBuilder<T> {
         this._params.$orderby = `${String(field)} ${direction}`;
+
         return this;
     }
 
@@ -103,6 +106,7 @@ export class ODataQueryBuilder<
      */
     top(count: number): ODataQueryBuilder<T> {
         this._params.$top = count.toString();
+
         return this;
     }
 
@@ -112,6 +116,7 @@ export class ODataQueryBuilder<
      */
     skip(count: number): ODataQueryBuilder<T> {
         this._params.$skip = count.toString();
+
         return this;
     }
 
@@ -139,6 +144,7 @@ export class ODataQueryBuilder<
      */
     count(): ODataQueryBuilder<T> {
         this._params.$count = 'true';
+
         return this;
     }
 
@@ -155,6 +161,7 @@ export class ODataQueryBuilder<
             this._filters.length ? `${type} ${expression}` : expression
         );
         this._params.$filter = this._filters.join(' ');
+
         return this;
     }
 
@@ -166,6 +173,7 @@ export class ODataQueryBuilder<
         const query = Object.entries(this._params)
             .map(([key, value]) => `${key}=${value}`)
             .join('&');
+
         return `${this._url}?${query}`;
     }
 
