@@ -21,10 +21,12 @@ import type { ODataQueryOption } from './types/types.js';
  * @example
  * // Create a query with filters
  * const query = queryBuilder
- *     .filter()
- *     .eq('Age', 30)
- *     .and()
- *     .eq('Gender', 'Male')
+ *     .filter((filter) =>
+ *         filter
+ *             .eq('Age', 30)
+ *             .and()
+ *             .eq('Gender', 'Male')
+ *     )
  *     .build();
  *
  * // The resulting query string will be:
@@ -60,7 +62,7 @@ export class ODataQueryBuilder {
      * @param fields - The fields to select.
      * @returns The current instance of ODataQueryBuilder.
      */
-    select(fields: string[]) {
+    select(fields: string[]): ODataQueryBuilder {
         this._params['$select'] = fields.join(',');
         return this;
     }
@@ -70,7 +72,7 @@ export class ODataQueryBuilder {
      * @param fields - The fields to expand.
      * @returns The current instance of ODataQueryBuilder.
      */
-    expand(fields: string[]) {
+    expand(fields: string[]): ODataQueryBuilder {
         this._params['$expand'] = fields.join(',');
         return this;
     }
@@ -108,16 +110,22 @@ export class ODataQueryBuilder {
 
     /**
      * Starts building a filter expression for the OData query.
-     * @returns A new instance of `FilterBuilder`.
+     * @param callback - A callback function that builds the filter expression using FilterBuilder.
+     * @returns The current instance of ODataQueryBuilder.
      */
-    filter() {
-        return new FilterBuilder(this);
+    filter(callback: (builder: FilterBuilder) => void): ODataQueryBuilder {
+        const filterBuilder = new FilterBuilder(this); // Pass the ODataQueryBuilder as parent to FilterBuilder
+        callback(filterBuilder);
+        const filterExpression = filterBuilder.toString(); // Automatically finalize the filter expression
+        this._filters.push(filterExpression);
+        this._params['$filter'] = this._filters.join(' and ');
+        return this;
     }
 
     /**
      * Specifies that the OData query should include a count of the total records.
      */
-    count() {
+    count(): ODataQueryBuilder {
         this._params['$count'] = 'true';
         return this;
     }
@@ -126,19 +134,27 @@ export class ODataQueryBuilder {
      * Sets the filter expression for the OData query.
      * @param expression - The filter expression.
      */
-    setFilterExpression(expression: string): ODataQueryBuilder {
+    private setFilterExpression(expression: string): ODataQueryBuilder {
         this._filters.push(expression);
         this._params['$filter'] = this._filters.join(' and ');
         return this;
     }
 
-    toQueryString(): string {
+    /**
+     * Converts the OData query parameters into a query string.
+     * @returns The full query string.
+     */
+    private toQueryString(): string {
         const query = Object.entries(this._params)
-            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+            .map(([key, value]) => `${key}=${value}`)
             .join('&');
         return `${this._url}?${query}`;
     }
 
+    /**
+     * Builds and returns the final query string.
+     * @returns The full query string.
+     */
     build(): string {
         return this.toQueryString();
     }

@@ -84,16 +84,6 @@ export class FilterBuilder {
         return this;
     }
 
-    build(): ODataQueryBuilder | FilterBuilder {
-        const expression = this.buildExpression();
-        if (this._parent instanceof ODataQueryBuilder) {
-            return this._parent.setFilterExpression(expression);
-        } else if (this._parent instanceof FilterBuilder) {
-            return this._parent.addExpression(expression);
-        }
-        return this;
-    }
-
     private buildExpression(): string {
         return this._expressions.join(' ');
     }
@@ -105,5 +95,18 @@ export class FilterBuilder {
 
     private formatValue(value: string | number): string {
         return typeof value === 'string' ? `'${value}'` : value.toString();
+    }
+
+    private finalize(): void {
+        const expression = this.buildExpression();
+        if (this._parent instanceof FilterBuilder) {
+            this._parent.addExpression(expression);
+        }
+    }
+
+    // Ensure the expressions are finalized automatically
+    toString(): string {
+        this.finalize();
+        return this.buildExpression();
     }
 }
